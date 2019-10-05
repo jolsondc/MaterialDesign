@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         relativeLayout =findViewById(R.id.relativeLayout)
         mainLayout =findViewById(R.id.mainLayout)
-        val display = windowManager.defaultDisplay
         imageView = findViewById(R.id.imageView)
         textview = findViewById(R.id.textview)
 
