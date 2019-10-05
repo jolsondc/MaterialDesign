@@ -22,19 +22,19 @@ import android.util.Pair as UtilPair
 
 
 class MainActivity : AppCompatActivity() {
-    var relativeLayout : RelativeLayout?=null
-    var mainLayout:ConstraintLayout?=null
-    var textview:TextView?=null
-    var imageView:ImageView? = null
+    var relativeLayout: RelativeLayout? = null
+    var mainLayout: ConstraintLayout? = null
+    var textview: TextView? = null
+    var imageView: ImageView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        relativeLayout =findViewById(R.id.relativeLayout)
-        mainLayout =findViewById(R.id.mainLayout)
+        relativeLayout = findViewById(R.id.relativeLayout)
+        mainLayout = findViewById(R.id.mainLayout)
         imageView = findViewById(R.id.imageView)
         textview = findViewById(R.id.textview)
 
-        imageView!!.setOnClickListener(object: View.OnClickListener{
+        imageView!!.setOnClickListener(object : View.OnClickListener {
             @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             override fun onClick(v: View?) {
                 startAnimatedActivity()
@@ -44,59 +44,64 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun performClick(view: View){
+    fun performClick(view: View) {
         animateChildren()
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun animateChildren(){
-        val slide1= Slide()
-        slide1.duration = 1000
-        slide1.slideEdge=Gravity.TOP
-        slide1.addTarget(relativeLayout)
+    fun animateChildren() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val slide1 = Slide()
+            slide1.duration = 1000
+            slide1.slideEdge = Gravity.TOP
+            slide1.addTarget(relativeLayout)
 
-        val fade = Fade()
-        fade.duration=2000
-        fade.addTarget(imageView)
+            val fade = Fade()
+            fade.duration = 2000
+            fade.addTarget(imageView)
 
-        val fade2 = Fade()
-        fade2.duration = 2000
-        fade2.addTarget(textview)
-
-
-        fade2.addListener(object :TransitionListener(){
-            override fun onTransitionEnded() {
-                val animatable = (imageView as ImageView).drawable as Animatable
-                animatable.start()
-            }
-
-        })
+            val fade2 = Fade()
+            fade2.duration = 2000
+            fade2.addTarget(textview)
 
 
-        val set = TransitionSet()
-        set.addTransition(slide1)
-        set.addTransition(fade)
-        set.addTransition(fade2)
+            fade2.addListener(object : TransitionListener() {
+                override fun onTransitionEnded() {
+                    val animatable = (imageView as ImageView).drawable as Animatable
+                    animatable.start()
+                }
 
-        TransitionManager.beginDelayedTransition(mainLayout, set)
+            })
+
+
+            val set = TransitionSet()
+            set.addTransition(slide1)
+            set.addTransition(fade)
+            set.addTransition(fade2)
+
+            TransitionManager.beginDelayedTransition(mainLayout, set)
+        }
         relativeLayout!!.visibility = View.VISIBLE
-        imageView?.visibility=View.VISIBLE
-        textview!!.visibility=View.VISIBLE
+        imageView?.visibility = View.VISIBLE
+        textview!!.visibility = View.VISIBLE
 
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun startAnimatedActivity(){
-
+    fun startAnimatedActivity() {
         val intent = Intent(this, SecondActivity::class.java)
-        val pair1 = UtilPair.create<View,String>(imageView, "imageMain")
-        val pair2 = UtilPair.create<View,String>(textview, "textMain")
-        val options = ActivityOptions.makeSceneTransitionAnimation(this@MainActivity,
-            pair1,
-            pair2)
-        startActivity(intent, options.toBundle())
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val pair1 = UtilPair.create<View, String>(imageView, "imageMain")
+            val pair2 = UtilPair.create<View, String>(textview, "textMain")
+            val options = ActivityOptions.makeSceneTransitionAnimation(
+                this@MainActivity,
+                pair1,
+                pair2
+            )
+            startActivity(intent, options.toBundle())
+        } else {
+            startActivity(intent)
+        }
     }
 }
