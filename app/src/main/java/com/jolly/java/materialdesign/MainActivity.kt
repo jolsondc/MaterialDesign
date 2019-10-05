@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun performClick(view: View){
         animateChildren()
@@ -93,14 +92,11 @@ class MainActivity : AppCompatActivity() {
     fun startAnimatedActivity(){
 
         val intent = Intent(this, SecondActivity::class.java)
-        // create the transition animation - the images in the layouts
-        // of both activities are defined with android:transitionName="robot"
         val pair1 = UtilPair.create<View,String>(imageView, "imageMain")
         val pair2 = UtilPair.create<View,String>(textview, "textMain")
         val options = ActivityOptions.makeSceneTransitionAnimation(this@MainActivity,
             pair1,
             pair2)
-        // start the new activity
         startActivity(intent, options.toBundle())
     }
 }
