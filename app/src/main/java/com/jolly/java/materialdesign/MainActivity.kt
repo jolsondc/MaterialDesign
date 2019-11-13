@@ -2,21 +2,24 @@ package com.jolly.java.materialdesign
 
 import android.app.ActivityOptions
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.Animatable
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.constraint.ConstraintLayout
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.transition.Fade
 import android.transition.Slide
 import android.transition.TransitionManager
 import android.transition.TransitionSet
+import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
+import com.jolly.java.materialdesign.adapter.SimpleAdapter
 import com.jolly.java.materialdesign.utils.TransitionListener
 import android.util.Pair as UtilPair
 
@@ -26,6 +29,9 @@ class MainActivity : AppCompatActivity() {
     var mainLayout: ConstraintLayout? = null
     var textview: TextView? = null
     var imageView: ImageView? = null
+    var spinner: Spinner?=null
+    internal var fruits = arrayOf("Apple", "Grapes", "Mango", "Pineapple", "Strawberry")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         mainLayout = findViewById(R.id.mainLayout)
         imageView = findViewById(R.id.imageView)
         textview = findViewById(R.id.textview)
+        spinner =findViewById(R.id.spinner)
 
         imageView!!.setOnClickListener(object : View.OnClickListener {
             @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -41,7 +48,19 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+        val customAdapter = SimpleAdapter(applicationContext, fruits)
+        spinner!!.adapter = customAdapter
 
+        spinner!!.setOnItemSelectedListener(object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                Log.i("TAG","selected :"+fruits[position])
+            }
+
+        })
+        spinner!!.background=ContextCompat.getDrawable(this,R.drawable.abc_edit_text_material)
     }
 
     fun performClick(view: View) {
